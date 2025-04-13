@@ -1,5 +1,22 @@
 import requests as rq 
 from bs4 import BeautifulSoup
+from dataclasses import dataclass
+
+@dataclass
+class Stock:
+    ticker: str 
+    exchange: str 
+    price: float = 0  
+    currency: str = "USD"
+    usd_price: float = 0
+
+    def __post_init__(self):  
+        price_info = get_price_info(self.ticker, self.exchange)
+        self.price = price_info['price']
+        self.currency = price_info['currency']
+        self.usd_price = price_info['usd_price']
+
+
 
 
 def convert_to_usd(currency):
@@ -34,9 +51,8 @@ def get_price_info(ticker , exchange):
     }
 
 if __name__ == "__main__":
-    print(get_price_info("SHOP","TSE"))
-    print()
-    print(get_price_info("SHOP","NASDAQ"))
+    print(Stock("SHOP", "TSE"))
+    print(Stock("SHOP","NASDAQ"))
 
     
     
