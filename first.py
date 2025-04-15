@@ -17,6 +17,22 @@ class Stock:
         self.usd_price = price_info['usd_price']
 
 
+@dataclass
+class Position:
+    stock : Stock  
+    quantity : int 
+
+@dataclass
+class Portfolio:
+    positions : list[Position] 
+
+    #  instance method 
+    def get_total_value(self):
+        total_value = 0  
+
+        for position in self.positions:
+            total_value += position.quantity * position.stock.usd_price
+        return total_value
 
 
 def convert_to_usd(currency):
@@ -51,8 +67,14 @@ def get_price_info(ticker , exchange):
     }
 
 if __name__ == "__main__":
-    print(Stock("SHOP", "TSE"))
-    print(Stock("SHOP","NASDAQ"))
+    shop = Stock("SHOP", "TSE")
+    googl = Stock("GOOGL", "NASDAQ")
+
+    # position for 10 , shop 
+    Position(shop , 10) 
+    portfolio = Portfolio([Position(shop , 10),Position(googl,5)])
+    print(round(portfolio.get_total_value(),2))
+
 
     
     
